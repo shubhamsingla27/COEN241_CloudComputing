@@ -1,5 +1,5 @@
 outputFile=$1
-sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+sync; sh -c "echo 3 > /proc/sys/vm/drop_caches"
 touch $outputFile
 > $outputFile
 
@@ -11,7 +11,7 @@ fileIoTests(){
 		sysbench --threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw prepare
 		sysbench --threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw run >> $outputFile
 		sysbench --threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw cleanup
-		sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+		sync; sh -c "echo 3 > /proc/sys/vm/drop_caches"
 		echo "-----------------------------------------------" >> $outputFile
 	done
 }
