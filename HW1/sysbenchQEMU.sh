@@ -3,6 +3,29 @@ sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
 touch $outputFile
 > $outputFile
 
+fileIoTests(){
+	size=$1
+	shift
+	for i in {1..5}; 
+	do
+		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw prepare
+		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw run >> $outputFile
+		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw cleanup
+		sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+		echo "-----------------------------------------------" >> $outputFile
+	done
+}
+
+cpuTests(){
+	number=$1
+	shift
+	for i in {1..5}; 
+	do
+		sysbench --test=cpu --cpu-max-prime=$number run >> $outputFile
+		echo "-----------------------------------------------" >> $outputFile
+	done
+}
+
 echo "CPU Configuration" >> $outputFile
 sudo lscpu | tee >(grep 'CPU(s):' >> $outputFile) >(grep 'Socket' >> $outputFile) >(grep 'Thread' >> $outputFile)
 sleep 3
@@ -24,26 +47,4 @@ fileIoTests 2G
 echo "###### 4G 128Files 16Threads" >> $outputFile
 fileIoTests 4G
 
-cpuTests(){
-	number=$1
-	shift
-	for i in {1..5}; 
-	do
-		sysbench --test=cpu --cpu-max-prime=$number run >> $outputFile
-		echo "-----------------------------------------------" >> $outputFile
-	done
-}
-
-fileIoTests(){
-	size=$1
-	shift
-	for i in {1..5}; 
-	do
-		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw prepare
-		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw run >> $outputFile
-		sysbench --num-threads=16 --test=fileio --file-total-size=$size --file-test-mode=rndrw cleanup
-		sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
-		echo "-----------------------------------------------" >> $outputFile
-	done
-}
 
