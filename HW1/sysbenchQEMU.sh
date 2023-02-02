@@ -34,9 +34,9 @@ cpuTests 30000
 echo "<<<=====================================================>>>" >> $outputFile
 
 echo "<<===File IO Tests===>>" >> $outputFile
-echo "###### 2G 128Files 16Threads" >> $outputFile
+echo "###### 1G 128Files 16Threads" >> $outputFile
 fileIoTests 1G
-echo "###### 4G 128Files 16Threads" >> $outputFile
+echo "###### 2G 128Files 16Threads" >> $outputFile
 fileIoTests 2G
 
 
