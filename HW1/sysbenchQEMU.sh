@@ -16,7 +16,15 @@ fileIoTests(){
 	done
 }
 
-
+cpuTests(){
+	number=$1
+	shift
+	for i in {1..5}; 
+	do
+		sysbench --test=cpu --cpu-max-prime=$number run >> $outputFile
+		echo "-----------------------------------------------" >> $outputFile
+	done
+}
 
 echo "CPU Configuration" >> $outputFile
 sudo lscpu | tee >(grep 'CPU(s):' >> $outputFile) >(grep 'Socket' >> $outputFile) >(grep 'Thread' >> $outputFile)
@@ -38,5 +46,7 @@ echo "###### 1G 128Files 16Threads" >> $outputFile
 fileIoTests 1G
 echo "###### 2G 128Files 16Threads" >> $outputFile
 fileIoTests 2G
+
+
 
 
