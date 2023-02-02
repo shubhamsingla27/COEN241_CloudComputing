@@ -41,7 +41,3 @@ echo "###### 1G 128Files 16Threads" >> $outputFile
 fileIoTests 1G
 echo "###### 2G 128Files 16Threads" >> $outputFile
 fileIoTests 2G
-
-
-
-
